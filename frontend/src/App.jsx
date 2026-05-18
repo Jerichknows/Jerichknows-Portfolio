@@ -5,15 +5,17 @@ import {
   Mail,
   MapPin,
   Menu,
+  Moon,
   MonitorSmartphone,
   ServerCog,
   ShieldCheck,
+  Sun,
 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 const profile = {
   name: "Jericho Radam",
-  role: "Front-End Developer",
+  role: "Full-Stack Developer",
   location: "Philippines",
   email: "jerichradam@gmail.com",
   github: "https://github.com/Jerichknows?tab=repositories",
@@ -35,7 +37,7 @@ const services = [
   {
     icon: ServerCog,
     title: "Backend Integration",
-    body: "Frontend experiences connected to APIs, databases, and deployment-ready services.",
+    body: "Full-stack experiences connected to APIs, databases, and deployment-ready services.",
     points: ["Django / Flask", "REST / GraphQL"],
   },
   {
@@ -231,21 +233,34 @@ function EarthScene() {
 
 function App() {
   const year = useMemo(() => new Date().getFullYear(), []);
+  const [isDark, setIsDark] = useState(() => localStorage.getItem("theme") === "dark");
+
+  useEffect(() => {
+    localStorage.setItem("theme", isDark ? "dark" : "light");
+  }, [isDark]);
 
   return (
-    <main className="min-h-screen bg-[#f7f2ea] text-[#151412]">
-      <nav className="fixed inset-x-0 top-0 z-50 border-b border-[#151412]/10 bg-[#f7f2ea]/90 backdrop-blur">
+    <main className={`site-shell ${isDark ? "theme-dark" : ""}`}>
+      <nav className="site-nav">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 sm:px-8">
           <a href="#home" className="text-lg font-semibold tracking-[-0.02em]" aria-label="Home">
             Jericho.
           </a>
-          <div className="hidden items-center gap-8 text-sm font-medium text-[#5f584f] md:flex">
+          <div className="hidden items-center gap-8 text-sm font-medium md:flex">
             <a href="#services">Services</a>
             <a href="#about">About</a>
             <a href="#skills">Skills</a>
             <a href="#projects">Projects</a>
           </div>
           <div className="flex items-center gap-2">
+            <button
+              className="icon-button"
+              type="button"
+              onClick={() => setIsDark((value) => !value)}
+              aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+            >
+              {isDark ? <Sun size={18} /> : <Moon size={18} />}
+            </button>
             <a className="nav-action hidden sm:inline-flex" href={`mailto:${profile.email}`}>
               Let's Talk
             </a>
@@ -257,23 +272,23 @@ function App() {
       </nav>
 
       <section id="home" className="relative min-h-screen overflow-hidden pt-20">
-        <div className="absolute right-0 top-16 h-[58vh] w-full sm:h-[70vh] lg:inset-y-0 lg:h-auto lg:w-[56%]">
+        <div className="absolute inset-0">
           <EarthScene />
         </div>
-        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,#f7f2ea_0%,rgba(247,242,234,0.96)_42%,rgba(247,242,234,0.45)_78%,rgba(247,242,234,0.12)_100%)]" />
+        <div className="hero-wash" />
 
         <div className="relative z-10 mx-auto grid min-h-[calc(100vh-5rem)] max-w-7xl items-center px-5 py-16 sm:px-8 lg:grid-cols-[0.58fr_0.42fr]">
           <div className="max-w-3xl">
-            <p className="mb-5 flex items-center gap-2 text-sm font-medium text-[#28594b]">
+            <p className="accent-text mb-5 flex items-center gap-2 text-sm font-medium">
               <MapPin size={16} />
               {profile.location}
             </p>
-            <p className="mb-3 text-lg text-[#665f55]">I am {profile.name}</p>
+            <p className="muted-text mb-3 text-lg">I am {profile.name}</p>
             <h1 className="text-5xl font-semibold leading-[0.96] tracking-[-0.045em] sm:text-7xl lg:text-8xl">
-              Front-End Developer & Product Builder
+              Full-Stack Developer & Product Builder
             </h1>
-            <p className="mt-7 max-w-2xl text-lg leading-8 text-[#665f55]">
-              I create responsive websites and application interfaces with clean structure, thoughtful details, and reliable API integration.
+            <p className="muted-text mt-7 max-w-2xl text-lg leading-8">
+              I create responsive websites, application interfaces, backend APIs, and deployment-ready product experiences.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <a className="primary-action" href={`mailto:${profile.email}`}>
@@ -295,7 +310,7 @@ function App() {
             <p className="section-kicker">Services</p>
             <h2 className="section-title">Designing and building clean, scalable web experiences.</h2>
           </div>
-          <p className="text-lg leading-8 text-[#665f55]">
+          <p className="muted-text text-lg leading-8">
             A practical blend of frontend polish, backend awareness, and product-focused delivery.
           </p>
         </div>
@@ -321,7 +336,7 @@ function App() {
         </div>
       </section>
 
-      <section id="about" className="bg-[#151412] py-16 text-[#f7f2ea] lg:py-24">
+      <section id="about" className="about-section py-16 lg:py-24">
         <div className="mx-auto grid max-w-7xl gap-10 px-5 sm:px-8 lg:grid-cols-[0.7fr_0.3fr] lg:items-center">
           <div>
             <p className="section-kicker text-[#9fc5b7]">About Me</p>
@@ -374,14 +389,14 @@ function App() {
         </div>
       </section>
 
-      <section id="projects" className="bg-[#fffaf1] py-16 lg:py-24">
+      <section id="projects" className="projects-section py-16 lg:py-24">
         <div className="mx-auto max-w-7xl px-5 sm:px-8">
           <div className="mb-10 grid gap-5 lg:grid-cols-[0.65fr_0.35fr] lg:items-end">
             <div>
               <p className="section-kicker">Projects</p>
               <h2 className="section-title">What I build for modern teams and businesses.</h2>
             </div>
-            <p className="text-lg leading-8 text-[#665f55]">
+            <p className="muted-text text-lg leading-8">
               Practical web products with clean interfaces, organized data, and reliable user flows.
             </p>
           </div>
@@ -420,8 +435,8 @@ function App() {
         </div>
       </section>
 
-      <footer className="border-t border-[#151412]/10 py-8">
-        <div className="mx-auto flex max-w-7xl flex-col gap-3 px-5 text-sm text-[#665f55] sm:px-8 md:flex-row md:items-center md:justify-between">
+      <footer className="site-footer py-8">
+        <div className="muted-text mx-auto flex max-w-7xl flex-col gap-3 px-5 text-sm sm:px-8 md:flex-row md:items-center md:justify-between">
           <p>© {year} {profile.name}. All rights reserved.</p>
           <p>{profile.role} / React / Django / AWS</p>
         </div>

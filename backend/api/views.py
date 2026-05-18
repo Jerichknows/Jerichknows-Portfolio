@@ -5,7 +5,7 @@ def profile(_request):
     return JsonResponse(
         {
             "name": "Jericho Radam",
-            "role": "Frontend Developer",
+            "role": "Full-Stack Developer",
             "location": "Philippines | Open to remote work",
             "email": "jerichradam@gmail.com",
             "github": "https://github.com/Jerichknows?tab=repositories",

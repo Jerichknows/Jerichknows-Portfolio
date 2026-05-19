@@ -70,111 +70,36 @@ const projects = [
     name: "Business Management Systems",
     type: "POS / Inventory / Reports",
     visual: "pos",
+    image: "./projects/project-pos.svg",
     body: "Operational tools for sales tracking, stock control, daily reports, and admin workflows.",
   },
   {
     name: "Service Booking Platforms",
     type: "Appointments / Customers / Admin",
     visual: "booking",
+    image: "./projects/project-booking.svg",
     body: "Clean scheduling experiences for service-based businesses, teams, and client-facing workflows.",
   },
   {
     name: "Professional Websites",
     type: "Portfolio / Company / Landing",
     visual: "website",
+    image: "./projects/project-website.svg",
     body: "Responsive, polished websites that present a brand clearly and guide visitors toward action.",
   },
   {
     name: "Data-Driven Dashboards",
     type: "Analytics / Records / Controls",
     visual: "dashboard",
+    image: "./projects/project-dashboard.svg",
     body: "Structured dashboards for browsing records, monitoring activity, and managing business data.",
   },
 ];
 
-function ProjectVisual({ type }) {
-  if (type === "pos") {
-    return (
-      <div className="project-visual pos-visual" aria-hidden="true">
-        <div className="visual-sidebar">
-          <span />
-          <span />
-          <span />
-        </div>
-        <div className="visual-screen">
-          <div className="visual-topline" />
-          <div className="pos-grid">
-            <span />
-            <span />
-            <span />
-            <span />
-            <span />
-            <span />
-          </div>
-          <div className="pos-receipt">
-            <span />
-            <span />
-            <strong />
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (type === "booking") {
-    return (
-      <div className="project-visual booking-visual" aria-hidden="true">
-        <div className="booking-calendar">
-          {Array.from({ length: 21 }).map((_, index) => (
-            <span key={index} className={index === 9 || index === 15 ? "active" : ""} />
-          ))}
-        </div>
-        <div className="booking-panel">
-          <span />
-          <strong />
-          <span />
-        </div>
-      </div>
-    );
-  }
-
-  if (type === "website") {
-    return (
-      <div className="project-visual website-visual" aria-hidden="true">
-        <div className="browser-bar">
-          <span />
-          <span />
-          <span />
-        </div>
-        <div className="website-hero">
-          <strong />
-          <span />
-          <span />
-        </div>
-        <div className="website-cards">
-          <span />
-          <span />
-          <span />
-        </div>
-      </div>
-    );
-  }
-
+function ProjectVisual({ image, name }) {
   return (
-    <div className="project-visual dashboard-visual" aria-hidden="true">
-      <div className="chart-lines">
-        <span />
-        <span />
-        <span />
-      </div>
-      <div className="dashboard-row">
-        <strong />
-        <span />
-      </div>
-      <div className="dashboard-row compact">
-        <strong />
-        <span />
-      </div>
+    <div className="project-visual">
+      <img src={image} alt={`${name} interface preview`} loading="lazy" />
     </div>
   );
 }
@@ -544,7 +469,7 @@ function App() {
                     style={{ "--offset": normalizedOffset }}
                     aria-hidden={normalizedOffset !== 0}
                   >
-                    <ProjectVisual type={project.visual} />
+                    <ProjectVisual image={project.image} name={project.name} />
                     <p className="text-sm font-medium text-[#8a7d6d]">{project.type}</p>
                     <h3>{project.name}</h3>
                     <p>{project.body}</p>

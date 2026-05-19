@@ -55,11 +55,11 @@ const stackGroups = [
   },
   {
     title: "Backend & API",
-    items: ["Django", "Flask", "REST", "GraphQL", "Riverpod"],
+    items: ["Django", "Flask", "Laravel", "REST", "GraphQL", "Riverpod"],
   },
   {
-    title: "Cloud & Database",
-    items: ["AWS", "Supabase", "SQL"],
+    title: "Cloud, Data & Product",
+    items: ["AWS", "AWS Lambda", "Supabase", "SQL", "SaaS"],
   },
 ];
 
@@ -325,10 +325,13 @@ function EarthScene() {
 function App() {
   const year = useMemo(() => new Date().getFullYear(), []);
   const [isDark, setIsDark] = useState(() => localStorage.getItem("theme") === "dark");
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
     localStorage.setItem("theme", isDark ? "dark" : "light");
   }, [isDark]);
+
+  const closeMenu = () => setIsMenuOpen(false);
 
   return (
     <main className={`site-shell ${isDark ? "theme-dark" : ""}`}>
@@ -355,11 +358,26 @@ function App() {
             <a className="nav-action hidden sm:inline-flex" href={`mailto:${profile.email}`}>
               Let's Talk
             </a>
-            <a className="icon-button md:hidden" href="#menu" aria-label="Open navigation">
+            <button
+              className="icon-button md:hidden"
+              type="button"
+              onClick={() => setIsMenuOpen((value) => !value)}
+              aria-label={isMenuOpen ? "Close navigation" : "Open navigation"}
+              aria-expanded={isMenuOpen}
+            >
               <Menu size={18} />
-            </a>
+            </button>
           </div>
         </div>
+        {isMenuOpen && (
+          <div id="menu" className="mobile-menu md:hidden">
+            <a href="#services" onClick={closeMenu}>Services</a>
+            <a href="#about" onClick={closeMenu}>About</a>
+            <a href="#skills" onClick={closeMenu}>Skills</a>
+            <a href="#projects" onClick={closeMenu}>Projects</a>
+            <a href={`mailto:${profile.email}`} onClick={closeMenu}>Let's Talk</a>
+          </div>
+        )}
       </nav>
 
       <section id="home" className="relative min-h-screen overflow-hidden pt-20">
@@ -369,7 +387,7 @@ function App() {
         <div className="hero-wash" />
 
         <div className="relative z-10 mx-auto grid min-h-[calc(100vh-5rem)] max-w-7xl items-center px-5 py-16 sm:px-8 lg:grid-cols-[0.58fr_0.42fr]">
-          <div className="max-w-3xl">
+          <div className="hero-content max-w-3xl">
             <p className="accent-text mb-5 flex items-center gap-2 text-sm font-medium">
               <MapPin size={16} />
               {profile.location}
@@ -386,9 +404,13 @@ function App() {
                 Start a Project
                 <ArrowUpRight size={18} />
               </a>
+              <a className="secondary-action" href="#projects">
+                View Work
+                <Code2 size={18} />
+              </a>
               <a className="secondary-action" href={profile.github}>
                 GitHub
-                <Code2 size={18} />
+                <ArrowUpRight size={18} />
               </a>
             </div>
           </div>
@@ -408,7 +430,7 @@ function App() {
 
         <div className="grid gap-5 md:grid-cols-2">
           {services.map(({ icon: Icon, title, body, points }) => (
-            <article key={title} className="service-card">
+            <article key={title} className="service-card animated-card">
               <div className="flex items-start justify-between gap-5">
                 <Icon className="text-[#28594b]" size={28} />
                 <span className="h-px flex-1 bg-[#151412]/10" />
@@ -444,7 +466,7 @@ function App() {
               <p>Product directions</p>
             </div>
             <div className="stat-card">
-              <span>14</span>
+              <span>17</span>
               <p>Core technologies</p>
             </div>
             <div className="stat-card">
@@ -463,7 +485,7 @@ function App() {
 
         <div className="grid gap-5 lg:grid-cols-3">
           {stackGroups.map((group) => (
-            <article key={group.title} className="stack-card">
+            <article key={group.title} className="stack-card animated-card">
               <div className="mb-7 flex items-center justify-between">
                 <h3>{group.title}</h3>
                 <Globe2 className="text-[#28594b]" size={22} />
@@ -493,14 +515,18 @@ function App() {
           </div>
           <div className="grid gap-5 md:grid-cols-2">
             {projects.map((project) => (
-              <article key={project.name} className="project-card">
+              <article key={project.name} className="project-card animated-card">
                 <ProjectVisual type={project.visual} />
                 <p className="text-sm font-medium text-[#8a7d6d]">{project.type}</p>
                 <h3>{project.name}</h3>
                 <p>{project.body}</p>
-                <span className="project-arrow">
+                <a
+                  className="project-arrow"
+                  href={`mailto:${profile.email}?subject=${encodeURIComponent(`Project inquiry: ${project.name}`)}`}
+                  aria-label={`Ask about ${project.name}`}
+                >
                   <ArrowUpRight size={18} />
-                </span>
+                </a>
               </article>
             ))}
           </div>

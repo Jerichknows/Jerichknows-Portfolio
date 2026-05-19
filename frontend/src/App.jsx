@@ -1,5 +1,7 @@
 import {
   ArrowUpRight,
+  ChevronLeft,
+  ChevronRight,
   Code2,
   Globe2,
   Mail,
@@ -326,12 +328,19 @@ function App() {
   const year = useMemo(() => new Date().getFullYear(), []);
   const [isDark, setIsDark] = useState(() => localStorage.getItem("theme") === "dark");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [activeProject, setActiveProject] = useState(0);
 
   useEffect(() => {
     localStorage.setItem("theme", isDark ? "dark" : "light");
   }, [isDark]);
 
   const closeMenu = () => setIsMenuOpen(false);
+  const showPreviousProject = () => {
+    setActiveProject((current) => (current === 0 ? projects.length - 1 : current - 1));
+  };
+  const showNextProject = () => {
+    setActiveProject((current) => (current === projects.length - 1 ? 0 : current + 1));
+  };
 
   return (
     <main className={`site-shell ${isDark ? "theme-dark" : ""}`}>
@@ -513,21 +522,58 @@ function App() {
               Practical web products with clean interfaces, organized data, and reliable user flows.
             </p>
           </div>
-          <div className="grid gap-5 md:grid-cols-2">
-            {projects.map((project) => (
-              <article key={project.name} className="project-card animated-card">
-                <ProjectVisual type={project.visual} />
-                <p className="text-sm font-medium text-[#8a7d6d]">{project.type}</p>
-                <h3>{project.name}</h3>
-                <p>{project.body}</p>
-                <a
-                  className="project-arrow"
-                  href={`mailto:${profile.email}?subject=${encodeURIComponent(`Project inquiry: ${project.name}`)}`}
-                  aria-label={`Ask about ${project.name}`}
-                >
-                  <ArrowUpRight size={18} />
-                </a>
-              </article>
+          <div className="project-carousel" aria-label="Project carousel">
+            <button className="carousel-button left" type="button" onClick={showPreviousProject} aria-label="Previous project">
+              <ChevronLeft size={22} />
+            </button>
+
+            <div className="project-stage">
+              {projects.map((project, index) => {
+                const offset = index - activeProject;
+                const normalizedOffset =
+                  offset > projects.length / 2
+                    ? offset - projects.length
+                    : offset < -projects.length / 2
+                      ? offset + projects.length
+                      : offset;
+
+                return (
+                  <article
+                    key={project.name}
+                    className={`project-card carousel-card ${normalizedOffset === 0 ? "is-active" : ""}`}
+                    style={{ "--offset": normalizedOffset }}
+                    aria-hidden={normalizedOffset !== 0}
+                  >
+                    <ProjectVisual type={project.visual} />
+                    <p className="text-sm font-medium text-[#8a7d6d]">{project.type}</p>
+                    <h3>{project.name}</h3>
+                    <p>{project.body}</p>
+                    <a
+                      className="project-arrow"
+                      href={`mailto:${profile.email}?subject=${encodeURIComponent(`Project inquiry: ${project.name}`)}`}
+                      aria-label={`Ask about ${project.name}`}
+                    >
+                      <ArrowUpRight size={18} />
+                    </a>
+                  </article>
+                );
+              })}
+            </div>
+
+            <button className="carousel-button right" type="button" onClick={showNextProject} aria-label="Next project">
+              <ChevronRight size={22} />
+            </button>
+          </div>
+
+          <div className="project-dots" aria-label="Choose project">
+            {projects.map((project, index) => (
+              <button
+                key={project.name}
+                type="button"
+                className={activeProject === index ? "active" : ""}
+                onClick={() => setActiveProject(index)}
+                aria-label={`Show ${project.name}`}
+              />
             ))}
           </div>
         </div>
